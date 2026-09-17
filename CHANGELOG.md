@@ -2,6 +2,16 @@
 
 All notable changes to `webex` will be documented in this file
 
+## v0.1.2 - 2026-09-17
+
+### Added
+
+* Use the configured room ID or recipient email as a fallback for notifications without an explicit recipient.
+
+### Changed
+
+* Reject ambiguous configuration when both default recipient values are set.
+
 ## v0.1.1 - 2026-09-17
 
 ### Changed

@@ -48,10 +48,6 @@ class WebexChannel
      */
     public function send(mixed $notifiable, Notification $notification)
     {
-        if (! $recipient = $notifiable->routeNotificationFor('webex', $notification)) {
-            return;
-        }
-
         if (empty($this->url) || empty($this->token)) {
             throw CouldNotSendNotification::missingConfiguration();
         }
@@ -61,6 +57,13 @@ class WebexChannel
 
         if (! isset($message->toPersonEmail) && ! isset($message->toPersonId) &&
             ! isset($message->roomId)) {
+            $recipient = $notifiable->routeNotificationFor('webex', $notification)
+                ?? $this->configuredRecipient();
+
+            if ($recipient === null) {
+                return;
+            }
+
             $message->to($recipient);
         }
 
@@ -86,5 +89,17 @@ class WebexChannel
         }
 
         return $response;
+    }
+
+    private function configuredRecipient(): ?string
+    {
+        $roomId = config('webex.room_id');
+        $email = config('webex.to_person_email');
+
+        if ($roomId !== null && $email !== null) {
+            throw CouldNotSendNotification::ambiguousRecipientConfiguration();
+        }
+
+        return $roomId ?? $email;
     }
 }

@@ -31,4 +31,9 @@ class CouldNotSendNotification extends Exception
     {
         return new self('Please ensure that Webex service url, id, and token are set.');
     }
+
+    public static function ambiguousRecipientConfiguration(): CouldNotSendNotification
+    {
+        return new self('Configure exactly one of Webex room ID or recipient email.');
+    }
 }

@@ -19,8 +19,17 @@ class WebexSendCommand extends Command
 
     public function handle(): int
     {
-        $roomId = $this->option('room-id') ?? config('webex.room_id');
-        $email = $this->option('to-person-email') ?? config('webex.to_person_email');
+        $roomOption = $this->option('room-id');
+        $emailOption = $this->option('to-person-email');
+
+        if ($roomOption !== null && $emailOption !== null) {
+            $this->error('Specify exactly one of --room-id or --to-person-email.');
+
+            return self::FAILURE;
+        }
+
+        $roomId = $roomOption !== null ? $roomOption : ($emailOption === null ? config('webex.room_id') : null);
+        $email = $emailOption !== null ? $emailOption : ($roomOption === null ? config('webex.to_person_email') : null);
 
         if (($roomId === null) === ($email === null)) {
             $this->error('Specify exactly one of --room-id or --to-person-email.');

@@ -77,7 +77,11 @@ php artisan vendor:publish --tag=webex-config
 
 Set `WEBEX_URL`, `WEBEX_TOKEN`, `WEBEX_ROOM_ID` and `WEBEX_TO_PERSON_EMAIL`
 [environment variables](https://laravel.com/docs/10.x/configuration#environment-configuration)
-to define the endpoint, bot and default recipient. One way to get a token is by creating a new
+to define the endpoint, token and optional default recipient. Configure exactly one default
+recipient. It is used by `webex:send` and by notifications that do not specify a recipient
+through `Notification::route()` or `toWebex()`.
+
+One way to get a token is by creating a new
 [Webex Bot](https://developer.webex.com/my-apps/new/bot).
 
 ## Usage
