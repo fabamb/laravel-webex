@@ -2,6 +2,22 @@
 
 All notable changes to `webex` will be documented in this file
 
+## v0.1.0 - 2026-09-17
+
+### Added
+
+* Laravel 12 and 13 support.
+* Publishable `config/webex.php` configuration.
+* `webex:send` Artisan command for text, Markdown and single-file messages.
+
+### Changed
+
+* Renamed the package to `fabamb/laravel-webex`.
+* Renamed the PHP namespace to `Fabamb\\LaravelWebex`.
+
+The entries below are the upstream project history from
+[`laravel-notification-channels/webex`](https://github.com/laravel-notification-channels/webex).
+
 ## v2.0.0 - 2024-04-15
 
 ### What's Changed
