@@ -368,7 +368,7 @@ class WebexChannelTest extends TestCase
 
         $this->guzzleHttp = m::mock(Client::class);
 
-        $this->webexChannel = new WebexChannel($this->guzzleHttp, 'url', 'id', 'token');
+        $this->webexChannel = new WebexChannel($this->guzzleHttp, 'url', 'token');
     }
 
     protected function tearDown(): void

@@ -2,6 +2,12 @@
 
 All notable changes to `webex` will be documented in this file
 
+## v0.1.1 - 2026-09-17
+
+### Changed
+
+* Removed the unused `bot_id` configuration and channel argument.
+
 ## v0.1.0 - 2026-09-17
 
 ### Added

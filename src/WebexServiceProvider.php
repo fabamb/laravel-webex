@@ -31,7 +31,6 @@ class WebexServiceProvider extends ServiceProvider
             return new WebexChannel(
                 new HttpClient,
                 config('webex.url'),
-                config('webex.bot_id'),
                 config('webex.token'),
             );
         });

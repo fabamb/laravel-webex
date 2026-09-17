@@ -24,20 +24,14 @@ class WebexChannel
     protected string $url;
 
     /**
-     * The sender's Webex ID.
-     */
-    protected string $id;
-
-    /**
      * The sender's Webex Access Token.
      */
     protected string $token;
 
-    public function __construct(HttpClient $http, string $url, string $id, string $token)
+    public function __construct(HttpClient $http, string $url, string $token)
     {
         $this->http = $http;
         $this->url = $url;
-        $this->id = $id;
         $this->token = $token;
     }
 
@@ -58,7 +52,7 @@ class WebexChannel
             return;
         }
 
-        if (empty($this->url) || empty($this->id) || empty($this->token)) {
+        if (empty($this->url) || empty($this->token)) {
             throw CouldNotSendNotification::missingConfiguration();
         }
 
