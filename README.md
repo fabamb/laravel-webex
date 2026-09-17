@@ -96,11 +96,13 @@ php artisan webex:send 'MyApp test message' --room-id='<room-id>'
 php artisan webex:send 'MyApp test message' --to-person-email='you@example.com'
 php artisan webex:send '**MyApp** test message' --room-id='<room-id>' --markdown
 php artisan webex:send 'Log allegato' --room-id='<room-id>' --file='/tmp/catalogotr.log'
+php artisan webex:send 'MyApp test message' --room-id='<room-id>' --token
 ```
 
 Exactly one recipient must be provided either by option or configuration. The `--file` option attaches one local file
-using Webex multipart upload. The command uses the Webex endpoint and token from `config/webex.php` and never prints
-the token.
+using Webex multipart upload. By default, the command uses the Webex endpoint and token from `config/webex.php`.
+Pass `--token` without a value to enter a temporary token through a hidden prompt, or use `--token=<token>` to provide
+an explicit override. The command never prints the token.
 
 If you are new to Laravel Notification, I highly recommend reading the official documentation which goes over the basics
 of [generating](https://laravel.com/docs/11.x/notifications#generating-notifications)

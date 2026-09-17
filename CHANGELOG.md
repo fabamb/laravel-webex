@@ -2,6 +2,12 @@
 
 All notable changes to `webex` will be documented in this file
 
+## v0.1.3 - 2026-09-17
+
+### Added
+
+* Prompt securely for a temporary Webex token when `webex:send` receives `--token` without a value.
+
 ## v0.1.2 - 2026-09-17
 
 ### Added

@@ -4,6 +4,7 @@ namespace Fabamb\LaravelWebex\Console\Commands;
 
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Psr\Http\Message\ResponseInterface;
 
 class WebexSendCommand extends Command
 {
@@ -28,8 +29,8 @@ class WebexSendCommand extends Command
             return self::FAILURE;
         }
 
-        $roomId = $roomOption !== null ? $roomOption : ($emailOption === null ? config('webex.room_id') : null);
-        $email = $emailOption !== null ? $emailOption : ($roomOption === null ? config('webex.to_person_email') : null);
+        $roomId = $roomOption !== null ? $roomOption : ($emailOption === null ? $this->configuration('webex.room_id') : null);
+        $email = $emailOption !== null ? $emailOption : ($roomOption === null ? $this->configuration('webex.to_person_email') : null);
 
         if (($roomId === null) === ($email === null)) {
             $this->error('Specify exactly one of --room-id or --to-person-email.');
@@ -37,7 +38,16 @@ class WebexSendCommand extends Command
             return self::FAILURE;
         }
 
-        $token = $this->option('token') ?? config('webex.token');
+        $tokenOptionWasProvided = $this->input->hasParameterOption('--token');
+        $token = $this->option('token');
+
+        if ($tokenOptionWasProvided && (! is_string($token) || $token === '')) {
+            $token = $this->secret('Webex access token');
+        }
+
+        if (! $tokenOptionWasProvided) {
+            $token ??= $this->configuration('webex.token');
+        }
 
         if (! is_string($token) || $token === '') {
             $this->error('Webex notification token is not configured.');
@@ -73,15 +83,7 @@ class WebexSendCommand extends Command
             ]];
 
         try {
-            $response = (new Client([
-                'base_uri' => rtrim((string) config('webex.url'), '/'),
-                'connect_timeout' => 5,
-                'timeout' => 15,
-                'headers' => [
-                    'Authorization' => 'Bearer '.$token,
-                    'Accept' => 'application/json',
-                ],
-            ]))->post('', $request);
+            $response = $this->sendRequest($token, $request);
         } catch (\Throwable $exception) {
             $this->error('Webex request failed: '.$exception->getMessage());
 
@@ -97,5 +99,26 @@ class WebexSendCommand extends Command
         $this->info('Webex message sent successfully.');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @param  array<string, mixed>  $request
+     */
+    protected function sendRequest(string $token, array $request): ResponseInterface
+    {
+        return (new Client([
+            'base_uri' => rtrim((string) $this->configuration('webex.url'), '/'),
+            'connect_timeout' => 5,
+            'timeout' => 15,
+            'headers' => [
+                'Authorization' => 'Bearer '.$token,
+                'Accept' => 'application/json',
+            ],
+        ]))->post('', $request);
+    }
+
+    protected function configuration(string $key): mixed
+    {
+        return $this->laravel->make('config')->get($key);
     }
 }
